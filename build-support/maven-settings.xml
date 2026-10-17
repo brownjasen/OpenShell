@@ -1,0 +1,10 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.2.0">
+  <mirrors>
+    <!-- Keep JetBrains' repository reachable even when machine settings mirror all repositories. -->
+    <mirror>
+      <id>central-mirror</id>
+      <mirrorOf>central</mirrorOf>
+      <url>https://maven.aliyun.com/repository/central</url>
+    </mirror>
+  </mirrors>
+</settings>
