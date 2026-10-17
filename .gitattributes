@@ -5,4 +5,5 @@
 *.properties text eol=lf
 *.py text eol=lf
 *.jar binary
+*.ico binary
 build-support/maven-repository/** -text

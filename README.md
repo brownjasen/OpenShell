@@ -2,9 +2,17 @@
 
 基于 Java Swing 的 SSH / SFTP 桌面工作台。覆盖终端交互、会话管理、远程文件、传输与资源监控。
 
+## Windows 免安装版
+
+到 [GitHub Releases](https://github.com/brownjasen/OpenShell/releases/latest) 下载 `OpenShell-1.0.0-windows-x64-portable.zip`，右键“全部解压”，然后双击其中的 **OpenShell.exe**。内置 Temurin Java 17，不需要安装 Java 或以管理员身份运行。
+
+请保留完整的 `app` 和 `runtime` 文件夹，不要只复制 EXE，也不要在 ZIP 预览中直接运行。个人连接和设置继续使用 `%USERPROFILE%\.openshell`；发行包不包含个人配置。当前 EXE 未代码签名，Windows 可能提示未知发布者。
+
+本轮实际验证环境为 Windows 11 x64；Windows 10、ARM64 和 32 位未作为已实测平台。校验值见同一 Release 的 `SHA256SUMS.txt`。
+
 ## 构建与运行
 
-开发环境：JDK 17+、Maven。当前验证环境为 Windows 11 / JDK 21，以 `--release 17` 编译；尚未在独立 JDK 17 运行时验收。
+开发环境：JDK 17+、Maven。当前编译环境为 Windows 11 / JDK 21，以 `--release 17` 编译；便携版的 Temurin Java 17.0.20.1 运行环境已执行回归和原生 EXE 启动验收。
 
 ```powershell
 git clone https://github.com/brownjasen/OpenShell.git
@@ -18,6 +26,14 @@ java -jar target/openshell-1.0.0.jar
 ```powershell
 mvn clean verify
 ```
+
+开发者在 Windows 上重建便携 ZIP：
+
+```powershell
+.\build-portable.ps1
+```
+
+需要包含 `jpackage.exe` 的 JDK 和 Maven；脚本验证应用、下载并校验固定版本的 Temurin JRE，产物在 `target/distributions/`。可用 `-JdkHome` 指定打包 JDK、`-RuntimeArchive` 指定已下载的固定 JRE ZIP、`-OutputDirectory` 指定新输出目录。`-SkipBuild` 仅适用于已有、已验证的当前可执行 JAR。脚本拒绝覆盖已有发行产物，不改系统 Java 配置。详见 [Windows 便携版验收记录](docs/windows-portable-2026-10-17.md)。
 
 JediTerm 的固定版本二进制、POM 与对应源码已从 JetBrains 官方仓库取得、核对摘要，并放在 `build-support/maven-repository`。Maven 按普通依赖从该目录解析，首次导入不再要求 Python 预取或访问 JetBrains CDN；其他依赖由 Maven 下载。来源、摘要和许可证见该目录的 `ORIGIN.md`。
 
@@ -117,4 +133,4 @@ mvn -B -ntp '-Dtest=LiveLinuxAcceptanceIT' `
 - [修复前的真实服务器与压力验收：3 项缺陷记录](docs/acceptance-2026-10-17.md)
 - [重连草稿、编辑恢复与发布包修复验收](docs/reconnect-package-fix-2026-10-17.md)
 
-后续仍包括断点续传、更多 Shell/发行版兼容验收、跳板机、系统凭据库、SOCKS5 和安装包。当前 Maven 构建产出可执行 JAR。
+后续仍包括断点续传、更多 Shell/发行版兼容验收、跳板机、系统凭据库、SOCKS5 和安装向导。当前可构建可执行 JAR 与 Windows x64 免安装便携 ZIP。
